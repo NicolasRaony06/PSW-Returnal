@@ -1,7 +1,7 @@
 import __init__
 from sqlmodel import Session, select
 from models.database import engine
-from models.model import Subscription
+from models.model import Subscription, Payment
 from datetime import date
 
 class SubscriptionService:
@@ -19,11 +19,35 @@ class SubscriptionService:
             statement = select(Subscription)
             results = session.exec(statement).all()
         return results
+    
+    def _has_paid(self, results):
+        for result in results:
+            if result.date.month == date.today().month:
+                return True
+        return False
+
+    def pay(self, subscription: Subscription):
+        with Session(self.engine) as session:
+            statement = select(Payment).join(Subscription).where(Subscription.company==subscription.company)
+            results = session.exec(statement).all()
+
+            if self._has_paid(results):
+                question = input('This subscription has been paid for this month. Do you wish to repay it? Y or N: ')
+
+                if question.upper() == 'Y':
+                    return
+
+            pay = Payment(subscription_id=subscription.id, date=date.today())
+            session.add(pay)
+            session.commit()
 
 subservice = SubscriptionService(engine)
 
-#subscription = Subscription(company='Amazon', site='primevideo.com', sub_date=date.today(), value=19)
+# subscriptions = subservice.list_all()                     Feito para via de teste
+# for index, subscription in enumerate(subscriptions):
+#     print(f'{index} -> {subscription.company}')
 
-#subservice.create(subscription)
+# choice = int(input())
+# subservice.pay(subscriptions[choice])
 
-print(subservice.list_all())
+# print(subservice.list_all())
