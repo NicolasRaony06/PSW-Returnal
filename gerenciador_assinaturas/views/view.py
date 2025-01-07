@@ -1,4 +1,3 @@
-import __init__
 from sqlmodel import Session, select
 from models.database import engine
 from models.model import Subscription, Payment
@@ -26,6 +25,7 @@ class SubscriptionService:
             result = session.exec(statement).one()
 
             pay_statement = select(Payment).where(Payment.subscription_id == id)
+
             results = session.exec(pay_statement).all()
 
             for pay_result in results:
@@ -101,11 +101,9 @@ class SubscriptionService:
         last_12_months = self._get_last_12_months()
         value_for_month = self._get_values_for_month(last_12_months)
 
-        last_12_months_format = [i[0] for i in last_12_months] 
+        last_12_months = list(map(lambda x: x[0],self._get_last_12_months()))
 
         import matplotlib.pyplot as plt
-        plt.plot(last_12_months_format, value_for_month)
+        
+        plt.plot(last_12_months, value_for_month)
         plt.show()
-
-subservice = SubscriptionService(engine)
-subservice.generate_chart()
