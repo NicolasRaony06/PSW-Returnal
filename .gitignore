@@ -3,3 +3,4 @@ gerenciador_assinaturas/venv/*
 diario_online/venv/*
 diario_online/material/*
 diario_online/media/*
+diario_online/db.sqlite3
