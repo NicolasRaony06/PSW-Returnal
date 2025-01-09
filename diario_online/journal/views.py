@@ -5,9 +5,24 @@ from django.contrib import messages
 from datetime import datetime, timedelta
 
 def home(request):
-    journals = Journal.objects.all().order_by('created_at')[:3]
+    people = Person.objects.all()
+    people_name = [person.name for person in people]
+    qtd_per_person = [Journal.objects.filter(person=person).count() for person in people]
+
+    journals = Journal.objects.all()
+    tags = []
+    for journal in journals:
+        for tag in journal.get_tags():
+            tags.append(tag)
+
+    tags = list(set(tags))
+    tags_count = []
+    for tag in tags:
+        tags_count.append((Journal.objects.filter(tags__icontains=f'{tag}')).count())
+
     if request.method == 'GET':
-        return render(request, 'home.html', {'journals':journals})
+        journals_last3 = Journal.objects.all().order_by('created_at')[:3]
+        return render(request, 'home.html', {'journals':journals_last3, 'people_name':people_name, 'qtd_per_person':qtd_per_person, 'tags':tags, 'tags_count':tags_count})
     
 def write(request):
     people = Person.objects.all()
