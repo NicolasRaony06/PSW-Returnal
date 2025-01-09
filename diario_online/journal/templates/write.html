@@ -76,4 +76,27 @@
     </div>
     
 </div>
+
+<script>
+    
+    const input = document.getElementById('data');
+    const link = document.getElementById('link');
+
+    input.addEventListener('input', () => {
+        const data = input.value;
+        if (data) {
+            link.href = `/journal/day?date=${data}`;
+        } else {
+            link.href = "#"; 
+        }
+    });
+
+
+    link.addEventListener('click', (e) => {
+        if (!input.value) {
+            e.preventDefault();
+            alert('Por favor, selecione uma data antes de continuar.');
+        }
+    });
+</script>
 {% endblock %}

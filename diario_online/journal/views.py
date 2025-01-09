@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Person, Journal
 from django.contrib import messages
+from datetime import datetime, timedelta
 
 def home(request):
     journals = Journal.objects.all().order_by('created_at')[:3]
@@ -58,3 +59,24 @@ def person_registration(request):
         person.save()
 
         return redirect('write')
+    
+def day(request):
+    if request.method == 'GET':
+        if request.GET.get('date'):
+            data = request.GET.get('date')
+            formated_data = datetime.strptime(data, '%Y-%m-%d')
+            journal_filtered = Journal.objects.filter(created_at__gte=formated_data).filter(created_at__lte=formated_data+timedelta(days=1))
+            
+            return render(request, 'day.html', {'journals':journal_filtered, 'total': journal_filtered.count(), 'date': data})
+        
+        return redirect('write')
+    
+def remove_day(request):
+    if request.method == 'GET':
+        data = request.GET.get('date')
+        formated_data = datetime.strptime(data, '%Y-%m-%d')
+        journal_filtered = Journal.objects.filter(created_at__gte=formated_data).filter(created_at__lte=formated_data+timedelta(days=1))
+
+        journal_filtered.delete()
+
+        return redirect('day')
