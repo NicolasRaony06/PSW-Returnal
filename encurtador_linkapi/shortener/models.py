@@ -4,7 +4,7 @@ from django.utils import timezone
 
 class Links(models.Model):
     redirect_link = models.URLField()
-    token = models.CharField(max_lenght=12, unique=True, null=True, blank=True)
+    token = models.CharField(max_length=12, unique=True, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     expiration_time = models.DurationField(null=True, blank=True)
     max_uniques_clicks = models.PositiveIntegerField(null=True, blank=True)
