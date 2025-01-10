@@ -1,6 +1,11 @@
 gerenciador_assinaturas/material/*
 gerenciador_assinaturas/venv/*
+gerenciador_assinaturas/database.db
 diario_online/venv/*
 diario_online/material/*
 diario_online/media/*
 diario_online/db.sqlite3
+encurtador_linkapi/venv/*
+encurtador_linkapi/material/*
+encurtador_linkapi/media/*
+encurtador_linkapi/db.sqlite3
