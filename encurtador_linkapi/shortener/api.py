@@ -58,3 +58,12 @@ def update_link(request, link_id: int, link_schema: UpdateLinkSchema):
     link.save()
 
     return 200, link
+
+@shortener_router.get('statistics/{link_id}/', response={200: dict})
+def statistics(request, link_id: int):
+    link = get_object_or_404(Links, id=link_id)
+
+    uniques_clicks = Clicks.objects.filter(link=link).values('ip').distinct().count()
+    total_clicks = Clicks.objects.filter(link=link).values('ip').count()
+
+    return 200, {'uniques_clicks': uniques_clicks, 'total_clicks': total_clicks}
