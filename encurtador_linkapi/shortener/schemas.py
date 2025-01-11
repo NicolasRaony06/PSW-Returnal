@@ -25,3 +25,9 @@ class LinkSchema(ModelSchema):
             expiration_time=int(instance.expiration_time.total_seconds() // 60),
             max_uniques_clicks=instance.max_uniques_clicks
         )
+    
+class UpdateLink(Schema):
+    redirect_link: str = None
+    token: str = None
+    max_uniques_clicks: int = None
+    active: bool = None
