@@ -26,8 +26,8 @@ class LinkSchema(ModelSchema):
             max_uniques_clicks=instance.max_uniques_clicks
         )
     
-class UpdateLink(Schema):
+class UpdateLinkSchema(Schema):
     redirect_link: str = None
     token: str = None
-    max_uniques_clicks: int = None
+    max_uniques_cliques: int = None
     active: bool = None
